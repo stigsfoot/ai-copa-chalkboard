@@ -1,4 +1,4 @@
-# Copa Chalkboard ⚽🧠
+# Copa Chalkboard
 
 A beginner Codelab: build a **two-agent tactical-analysis system** on Gemini +
 [Google ADK](https://google.github.io/adk-docs/). A **Match Scout** looks at one
@@ -24,15 +24,7 @@ for exactly what was verified against that repo.
 
 ## The flow
 
-```
-   frame ──▶ Match Scout ──▶ ScoutReport ──▶ [ validation gate ]
-                                                   │ passed?
-                                          no ◀─────┴─────▶ yes
-                                       (stop, report      Tactical Analyst
-                                        the issues)         │
-                                                            ▼
-                                                       AnalystReport
-```
+![Pipeline Flow Diagram](assets/pipeline_flow_diagram.png)
 
 ## Quickstart
 

@@ -26,11 +26,7 @@ report. Return ONLY a JSON object with:
 
 def build_analyst_prompt(report: ScoutReport) -> str:
     """Render the Scout's report into the Analyst's input prompt."""
-    return (
-        ANALYST_SYSTEM
-        + "\n\nSCOUT REPORT:\n"
-        + report.model_dump_json(indent=2)
-    )
+    return ANALYST_SYSTEM + "\n\nSCOUT REPORT:\n" + report.model_dump_json(indent=2)
 
 
 def parse_analyst_output(text: str) -> AnalystReport:
@@ -60,14 +56,17 @@ def analyst_with_genai(report: ScoutReport) -> AnalystReport:
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
             response_schema=AnalystReport,
-            temperature=0.3,
         ),
     )
     return parse_analyst_output(resp.text or "")
 
 
 def make_analyst_agent():
-    """Build the Analyst as a Google ADK ``LlmAgent`` (ADK-native path)."""
+    """Build the Analyst as a Google ADK ``LlmAgent`` (ADK-native path).
+
+    Structured output via ``output_schema`` (see scout.make_scout_agent for the
+    ADK-vs-genai distinction). Verified against google-adk 2.2.0.
+    """
     from google.adk.agents import LlmAgent
     from google.genai import types
 
@@ -76,9 +75,6 @@ def make_analyst_agent():
         model=config.ANALYST_MODEL,
         description="Reasons over a validated ScoutReport and returns an AnalystReport.",
         instruction=ANALYST_SYSTEM,
-        generate_content_config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            response_schema=AnalystReport,
-            temperature=0.3,
-        ),
+        output_schema=AnalystReport,
+        generate_content_config=types.GenerateContentConfig(temperature=0.3),
     )

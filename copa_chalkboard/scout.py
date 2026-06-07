@@ -41,7 +41,6 @@ def parse_scout_output(text: str) -> ScoutReport:
     """
     cleaned = text.strip()
     if cleaned.startswith("```"):
-        # drop the first fence line and any trailing fence
         cleaned = cleaned.split("\n", 1)[-1]
         cleaned = cleaned.rsplit("```", 1)[0].strip()
     try:
@@ -55,10 +54,11 @@ def parse_scout_output(text: str) -> ScoutReport:
 
 
 def scout_with_genai(image_bytes: bytes, mime_type: str = "image/jpeg") -> ScoutReport:
-    """Run the Scout against an image using google-genai with enforced schema.
+    """Run the Scout against an image using google-genai with an enforced schema.
 
-    This is the simple, beginner path. Lazy-imports the SDK so the rest of the
-    package stays import-clean.
+    The beginner path. NOTE: with the raw google-genai SDK the schema IS passed
+    via GenerateContentConfig.response_schema. (ADK is different — see
+    make_scout_agent.) Lazy-imports the SDK so the package stays import-clean.
     """
     from google import genai
     from google.genai import types
@@ -81,7 +81,9 @@ def scout_with_genai(image_bytes: bytes, mime_type: str = "image/jpeg") -> Scout
 def make_scout_agent():
     """Build the Scout as a Google ADK ``LlmAgent`` (the ADK-native path).
 
-    Used by the ADK pipeline (pipeline.make_adk_pipeline). Lazy-imports ADK so
+    NOTE: ADK enforces structured output via ``LlmAgent.output_schema`` — NOT via
+    ``response_schema`` inside ``generate_content_config`` (that raises a
+    validation error). Verified against google-adk 2.2.0. Lazy-imports ADK so
     `pip install copa-chalkboard` without the [adk] extra still works.
     """
     from google.adk.agents import LlmAgent
@@ -92,9 +94,6 @@ def make_scout_agent():
         model=config.SCOUT_MODEL,
         description="Looks at one match frame and returns a structured ScoutReport.",
         instruction=SCOUT_PROMPT,
-        generate_content_config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            response_schema=ScoutReport,
-            temperature=0.1,
-        ),
+        output_schema=ScoutReport,
+        generate_content_config=types.GenerateContentConfig(temperature=0.1),
     )
