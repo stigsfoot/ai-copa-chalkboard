@@ -1,0 +1,40 @@
+{
+  "code-hygiene-hook": {
+    "PostToolUse": [
+      {
+        "matcher": "replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/antigravity_hooks.py --post-write",
+            "timeout": 30
+          }
+        ]
+      },
+      {
+        "matcher": "multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/antigravity_hooks.py --post-write",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  },
+  "command-safety-hook": {
+    "PreToolUse": [
+      {
+        "matcher": "run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/antigravity_hooks.py --pre-cmd",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
