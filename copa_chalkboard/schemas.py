@@ -36,7 +36,6 @@ class ScoutReport(BaseModel):
     players_detected: int = Field(ge=0)
     player_positions: list[PlayerPosition] = Field(default_factory=list)
     ball_zone: Zone
-    tactical_note: str = Field(min_length=1)
 
 
 class GateResult(BaseModel):

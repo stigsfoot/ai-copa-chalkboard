@@ -9,8 +9,7 @@ GOOD = """{
   "player_positions": [
     {"team": "home", "zone": "defensive", "approx_x": 20, "approx_y": 80}
   ],
-  "ball_zone": "defensive",
-  "tactical_note": "Keeper distributes short."
+  "ball_zone": "defensive"
 }"""
 
 FENCED = "```json\n" + GOOD + "\n```"

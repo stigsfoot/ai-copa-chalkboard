@@ -14,7 +14,6 @@ def test_valid_scout_report():
             PlayerPosition(team="away", zone="attacking", approx_x=70, approx_y=30),
         ],
         ball_zone="midfield",
-        tactical_note="Home side compresses the midfield.",
     )
     assert r.players_detected == 2
     assert len(r.player_positions) == 2
@@ -26,7 +25,6 @@ def test_rejects_bad_zone():
             players_detected=0,
             player_positions=[],
             ball_zone="penalty-box",  # not a valid Zone
-            tactical_note="x",
         )
 
 
@@ -35,11 +33,8 @@ def test_rejects_out_of_range_coordinates():
         PlayerPosition(team="home", zone="midfield", approx_x=150, approx_y=10)
 
 
-def test_rejects_empty_tactical_note():
-    with pytest.raises(ValidationError):
-        ScoutReport(
-            players_detected=0, player_positions=[], ball_zone="midfield", tactical_note=""
-        )
+def test_tactical_note_removed():
+    assert "tactical_note" not in ScoutReport.model_fields
 
 
 def test_analyst_report_defaults_confidence_medium():

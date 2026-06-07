@@ -4,12 +4,11 @@ from copa_chalkboard.gate import validate_scout_report
 from copa_chalkboard.schemas import PlayerPosition, ScoutReport
 
 
-def _report(n, positions, note="A solid shape.", ball="midfield"):
+def _report(n, positions, ball="midfield"):
     return ScoutReport(
         players_detected=n,
         player_positions=positions,
         ball_zone=ball,
-        tactical_note=note,
     )
 
 
