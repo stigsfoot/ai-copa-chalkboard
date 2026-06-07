@@ -8,13 +8,6 @@ a **validation gate** guarding the handoff between them.
 > The whole thing runs **in a single process** (one Colab notebook). No gateway,
 > no Redis, no Cloud Run. The agent-to-agent handoff *is* the lesson.
 
-This project mirrors the patterns in Google's
-[`GoogleCloudPlatform/race-condition`](https://github.com/GoogleCloudPlatform/race-condition)
-reference architecture (from the Google Cloud Next '26 Developer Keynote),
-distilled to the smallest thing that teaches them. See
-[`docs/codelab-verification-findings.md`](docs/codelab-verification-findings.md)
-for exactly what was verified against that repo.
-
 ## What you'll learn
 
 1. A **multimodal agent** (the Scout) that returns reliable structured JSON.
