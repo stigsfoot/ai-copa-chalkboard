@@ -9,6 +9,10 @@ from __future__ import annotations
 
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv()  # loads .env from the current working directory (or any parent)
+
 # --- Models -----------------------------------------------------------------
 # The Scout needs vision; gemini-3.5-flash is the current cost-efficient
 # multimodal Flash model. The Analyst is text-only reasoning over the Scout's

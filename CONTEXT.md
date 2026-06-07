@@ -16,9 +16,9 @@ A **Match Scout** looks at one match **frame**, emits a **ScoutReport**, a
 |---|---|
 | **Frame** | A single still image of a football (soccer) match. The only raw input. |
 | **Match Scout** (Scout) | The multimodal agent. Vision in, structured `ScoutReport` out. Does NOT analyze tactics. |
-| **ScoutReport** | The typed contract the Scout emits: `players_detected`, `player_positions[]`, `ball_zone`, `tactical_note`. |
+| **ScoutReport** | The typed contract the Scout emits: `players_detected`, `player_positions[]`, `ball_zone`, `tactical_note`. Note: `tactical_note` (free-text) is the field most prone to ungrounded or confabulated game-state claims from a single frame. |
 | **Zone** | A third of the pitch: `defensive` \| `midfield` \| `attacking`. |
-| **Validation gate** (the gate) | A pure function that scores a `ScoutReport` 0–100 and returns pass/fail. Guards the handoff. |
+| **Validation gate** (the gate) | A pure function that scores a `ScoutReport` 0–100 and returns pass/fail. Guards the handoff. Caveat: The gate only checks structural and internal consistency (e.g. valid enums, plausible ranges) — it cannot check external grounding. A fabricated-but-internally-consistent report can score 100. |
 | **Critical finding** | A gate issue severe enough to force a fail regardless of score (e.g. an implausible player count). |
 | **Handoff** | The in-process pass of a *validated* `ScoutReport` from Scout to Analyst. This is the "A2A" moment. |
 | **Tactical Analyst** (Analyst) | The reasoning agent. Reads the `ScoutReport` only (never the image), emits an `AnalystReport`. |

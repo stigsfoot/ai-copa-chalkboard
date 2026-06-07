@@ -10,7 +10,7 @@ a **validation gate** guarding the handoff between them.
 
 ## What you'll learn
 
-1. A **multimodal agent** (the Scout) that returns reliable structured JSON.
+1. A **multimodal agent** (the Scout) — exploring how reliably a vision model can emit structured JSON from match imagery (consistency testing showed 100% schema alignment on transition plays, though factual grounding remains unverified by syntax gates).
 2. An **in-process A2A handoff** — one agent invoking another via ADK `AgentTool`.
 3. A **validation gate** that refuses to pass a bad report downstream
    (the same idea as race-condition's LLM-as-Judge `planner_with_eval`).
@@ -33,7 +33,7 @@ cp .env.example .env    # then edit .env  (it's gitignored)
 export GEMINI_API_KEY=...          # or rely on .env
 
 # 4. Run the two-agent pipeline on a match image
-make run IMAGE=https://commons.wikimedia.org/wiki/Special:FilePath/Example_match.jpg
+make run IMAGE=https://commons.wikimedia.org/wiki/Special:FilePath/Sulley_Muntari_(Ghana_national_football_team).jpg
 #   or: python -m copa_chalkboard --image ./assets/frame.jpg
 ```
 
