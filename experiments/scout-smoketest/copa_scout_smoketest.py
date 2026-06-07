@@ -97,8 +97,7 @@ The JSON MUST match this exact schema:
     {"team": "home|away", "zone": "defensive|midfield|attacking",
      "approx_x": 0, "approx_y": 0}
   ],
-  "ball_zone": "defensive|midfield|attacking",
-  "tactical_note": "one sentence"
+  "ball_zone": "defensive|midfield|attacking"
 }
 
 Rules:
@@ -107,7 +106,6 @@ Rules:
 - team is "home" or "away" (your best guess from kit color).
 - zone and ball_zone are one of: defensive, midfield, attacking.
 - approx_x and approx_y are integers 0-100 (percent of image width/height).
-- tactical_note is a single short sentence.
 Output the JSON object and nothing else."""
 
 # Response schema for the structured-output fallback (step 3.4).
@@ -135,13 +133,11 @@ RESPONSE_SCHEMA: dict[str, Any] = {
             "type": "string",
             "enum": ["defensive", "midfield", "attacking"],
         },
-        "tactical_note": {"type": "string"},
     },
     "required": [
         "players_detected",
         "player_positions",
         "ball_zone",
-        "tactical_note",
     ],
 }
 
@@ -149,7 +145,6 @@ REQUIRED_TOP_KEYS = {
     "players_detected",
     "player_positions",
     "ball_zone",
-    "tactical_note",
 }
 VALID_ZONES = {"defensive", "midfield", "attacking"}
 VALID_TEAMS = {"home", "away"}
@@ -197,9 +192,6 @@ def validate_schema(obj: Any) -> tuple[bool, list[str], int | None]:
 
     if obj.get("ball_zone") not in VALID_ZONES:
         problems.append(f"ball_zone not in {sorted(VALID_ZONES)}: {obj.get('ball_zone')!r}")
-
-    if not isinstance(obj.get("tactical_note"), str):
-        problems.append("tactical_note is not a string.")
 
     positions = obj.get("player_positions")
     if not isinstance(positions, list):

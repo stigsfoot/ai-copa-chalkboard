@@ -17,7 +17,6 @@ from .schemas import GateResult, ScoutReport
 # Penalty weights (subtracted from a starting score of 100).
 _PENALTY_COUNT_MISMATCH = 25  # players_detected != len(player_positions)
 _PENALTY_IMPLAUSIBLE_COUNT = 40  # critical: count outside sane bounds
-_PENALTY_EMPTY_NOTE = 20
 _PENALTY_NO_POSITIONS = 30  # claims players but lists none
 
 # A finding at or above this severity is "critical" and forces a fail
@@ -68,11 +67,6 @@ def validate_scout_report(
     if n_claimed > 0 and n_listed == 0:
         score -= _PENALTY_NO_POSITIONS
         issues.append("players_detected > 0 but player_positions is empty.")
-
-    # A handoff with no tactical note gives the Analyst nothing to anchor on.
-    if not report.tactical_note.strip():
-        score -= _PENALTY_EMPTY_NOTE
-        issues.append("tactical_note is empty.")
 
     score = max(0, score)
     passed = (score >= threshold) and not has_critical

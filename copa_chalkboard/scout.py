@@ -28,7 +28,6 @@ Return ONLY a JSON object matching the required schema. No prose, no code fences
     zone ("defensive" | "midfield" | "attacking"),
     approx_x and approx_y (integers 0-100, percent of width/height).
 - ball_zone: "defensive" | "midfield" | "attacking".
-- tactical_note: a single short sentence.
 """
 
 

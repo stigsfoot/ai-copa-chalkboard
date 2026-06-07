@@ -23,7 +23,7 @@ returns a `GateResult(passed, score, issues)`. Pass requires `score >= threshold
 The Analyst runs only if the gate passes.
 
 Checks: player-count plausibility (critical), count-vs-positions consistency,
-non-empty positions when players are claimed, non-empty tactical note.
+non-empty positions when players are claimed.
 
 ## Consequences
 

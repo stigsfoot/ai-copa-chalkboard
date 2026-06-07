@@ -16,14 +16,13 @@ def _good_report():
             PlayerPosition(team="away", zone="attacking", approx_x=75, approx_y=35),
         ],
         ball_zone="midfield",
-        tactical_note="Away team springs a counter.",
     )
 
 
 def _bad_report():
     # implausible count -> critical -> gate fails
     return ScoutReport(
-        players_detected=999, player_positions=[], ball_zone="midfield", tactical_note="?"
+        players_detected=999, player_positions=[], ball_zone="midfield"
     )
 
 
