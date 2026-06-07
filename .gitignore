@@ -1,0 +1,25 @@
+# --- Secrets (NEVER commit) ---
+.env
+.env.local
+*.key
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# --- Smoke-test outputs ---
+experiments/**/copa_scout_results.json
+
+# --- OS / editor ---
+.DS_Store
+.idea/
+.vscode/
