@@ -5,9 +5,12 @@ Usage:
     python -m copa_chalkboard --image https://.../match-frame.jpg
     # or a local file:
     python -m copa_chalkboard --image ./assets/frame.jpg
+    # or the ADK-native Workflow graph (needs the [adk] extra):
+    python -m copa_chalkboard --image ./assets/frame.jpg --adk
 
-This uses the plain-Python pipeline (run_pipeline_local) with the real
-google-genai model steps. The ADK-native pipeline lives in pipeline.make_adk_pipeline.
+By default this uses the plain-Python pipeline (run_pipeline_local) with the
+real google-genai model steps. ``--adk`` runs the same flow as an ADK Workflow
+(pipeline.make_adk_pipeline / run_pipeline_adk). Both print a PipelineResult.
 """
 
 from __future__ import annotations
@@ -15,7 +18,7 @@ from __future__ import annotations
 import argparse
 import sys
 
-from .pipeline import run_pipeline_local
+from .pipeline import run_pipeline_adk, run_pipeline_local
 
 
 def _load_image(source: str) -> tuple[bytes, str]:
@@ -23,9 +26,7 @@ def _load_image(source: str) -> tuple[bytes, str]:
     if source.startswith(("http://", "https://")):
         import requests
 
-        resp = requests.get(
-            source, timeout=30, headers={"User-Agent": "copa-chalkboard/0.1"}
-        )
+        resp = requests.get(source, timeout=30, headers={"User-Agent": "copa-chalkboard/0.1"})
         resp.raise_for_status()
         ctype = resp.headers.get("Content-Type", "image/jpeg")
         if not ctype.startswith("image/"):
@@ -40,10 +41,16 @@ def _load_image(source: str) -> tuple[bytes, str]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Copa Chalkboard two-agent pipeline.")
     parser.add_argument("--image", required=True, help="Image URL or local path.")
+    parser.add_argument(
+        "--adk",
+        action="store_true",
+        help="Run the ADK-native Workflow graph instead of the plain-Python pipeline.",
+    )
     args = parser.parse_args(argv)
 
     image_bytes, mime = _load_image(args.image)
-    result = run_pipeline_local(image_bytes, mime)
+    run = run_pipeline_adk if args.adk else run_pipeline_local
+    result = run(image_bytes, mime)
 
     print("=== ScoutReport ===")
     print(result.report.model_dump_json(indent=2))

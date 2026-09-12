@@ -13,6 +13,8 @@ import json
 from . import config
 from .schemas import AnalystReport, ScoutReport
 
+ANALYST_AGENT_NAME = "tactical_analyst"
+
 ANALYST_SYSTEM = """\
 You are a Tactical Analyst. You receive a structured scouting report (JSON) about
 one frame of a football match. You do NOT see the image. Reason only over the
@@ -64,17 +66,21 @@ def analyst_with_genai(report: ScoutReport) -> AnalystReport:
 def make_analyst_agent():
     """Build the Analyst as a Google ADK ``LlmAgent`` (ADK-native path).
 
-    Structured output via ``output_schema`` (see scout.make_scout_agent for the
-    ADK-vs-genai distinction). Verified against google-adk 2.2.0.
+    ``input_schema=ScoutReport`` makes the contract explicit on the way IN: as a
+    Workflow node the Analyst accepts only a ScoutReport, never an image.
+    ``output_schema`` enforces the contract on the way OUT (see
+    scout.make_scout_agent for the ADK-vs-genai distinction). Verified against
+    google-adk 2.9.0.
     """
     from google.adk.agents import LlmAgent
     from google.genai import types
 
     return LlmAgent(
-        name="tactical_analyst",
+        name=ANALYST_AGENT_NAME,
         model=config.ANALYST_MODEL,
         description="Reasons over a validated ScoutReport and returns an AnalystReport.",
         instruction=ANALYST_SYSTEM,
+        input_schema=ScoutReport,
         output_schema=AnalystReport,
         generate_content_config=types.GenerateContentConfig(temperature=0.3),
     )

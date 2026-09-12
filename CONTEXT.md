@@ -23,8 +23,8 @@ A **Match Scout** looks at one match **frame**, emits a **ScoutReport**, a
 | **Handoff** | The in-process pass of a *validated* `ScoutReport` from Scout to Analyst. This is the "A2A" moment. |
 | **Tactical Analyst** (Analyst) | The reasoning agent. Reads the `ScoutReport` only (never the image), emits an `AnalystReport`. |
 | **AnalystReport** | `summary`, `key_observations[]`, `recommended_adjustment`, `confidence`. |
-| **In-process A2A** | One agent invoking another inside a single Python process (ADK `AgentTool` / `SequentialAgent`) — no network, no gateway. |
-| **Distributed A2A** | The other style: agents as separate services, discovered via `/.well-known/agent-card.json`, talking over HTTP/JSON-RPC. Not needed here. |
+| **In-process A2A** | One agent handing off to another inside a single Python process — here an ADK 2.0 `Workflow` graph (Scout node -> gate node -> Analyst node), no network, no gateway. Not the A2A *protocol*; see **Distributed A2A**. |
+| **Distributed A2A** | The other style, and the one the A2A *protocol* actually names: agents as separate services, discovered via `/.well-known/agent-card.json`, talking over HTTP/JSON-RPC (ADK: `RemoteA2aAgent`, `to_a2a(...)`). Not needed here; a deliberate follow-on. |
 
 ## Naming rules
 

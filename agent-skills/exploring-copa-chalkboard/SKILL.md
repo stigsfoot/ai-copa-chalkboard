@@ -24,7 +24,7 @@ smallest thing that teaches the patterns.
 | The shared vocabulary | `CONTEXT.md` |
 | The contracts between agents | `copa_chalkboard/schemas.py` |
 | The vision step | `docs/adr/0002` → `copa_chalkboard/scout.py` → `experiments/scout-smoketest/` |
-| The handoff (the lesson) | `docs/adr/0001` → `copa_chalkboard/pipeline.py` |
+| The handoff (the lesson) | `docs/adr/0001` → `docs/adr/0004` → `copa_chalkboard/pipeline.py` → `tests/test_adk_workflow.py` |
 | The validation gate | `docs/adr/0003` → `copa_chalkboard/gate.py` → `tests/test_gate.py` |
 | Why anything is the way it is | `docs/adr/` |
 | What was verified vs the reference repo | `docs/codelab-verification-findings.md` |
@@ -41,10 +41,10 @@ the (validated) report and never sees the image.
 
 ## Patterns worth understanding
 
-1. **In-process A2A.** `pipeline.make_adk_pipeline()` wraps each agent as an ADK
-   `AgentTool` and a root `LlmAgent` calls them — all in one process. Same idea
-   as the race-condition simulator's `AgentTool(agent=pipeline)`. No gateway,
-   no Redis.
+1. **In-process handoff.** `pipeline.make_adk_pipeline()` builds an ADK 2.0
+   `Workflow` graph: Scout node -> gate node (routes `pass`/`fail`) -> Analyst
+   node — all in one process, no orchestrator LLM. No gateway, no Redis.
+   (`docs/adr/0004` explains why not `AgentTool`.)
 2. **The gate is pure.** `gate.py` has no model calls or I/O, so it's instant,
    deterministic, and fully unit-tested. It mirrors `planner_with_eval`'s
    "score ≥ 75 and no critical finding" rule.
@@ -56,7 +56,7 @@ the (validated) report and never sees the image.
 ## Two implementations of the same flow
 
 - `run_pipeline_local` — plain Python, model steps injected, the tested reference.
-- `make_adk_pipeline` — the ADK-native version, for seeing the framework idiom.
+- `make_adk_pipeline` / `run_pipeline_adk` — the ADK-native `Workflow` graph, for seeing the framework idiom. `python -m copa_chalkboard --image ... --adk`.
 
 ## When changing code
 

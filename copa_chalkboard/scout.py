@@ -18,6 +18,8 @@ import json
 from . import config
 from .schemas import ScoutReport
 
+SCOUT_AGENT_NAME = "match_scout"
+
 SCOUT_PROMPT = """\
 You are a football (soccer) Match Scout analyzing a single still frame.
 Return ONLY a JSON object matching the required schema. No prose, no code fences.
@@ -82,14 +84,14 @@ def make_scout_agent():
 
     NOTE: ADK enforces structured output via ``LlmAgent.output_schema`` — NOT via
     ``response_schema`` inside ``generate_content_config`` (that raises a
-    validation error). Verified against google-adk 2.2.0. Lazy-imports ADK so
+    validation error). Verified against google-adk 2.9.0. Lazy-imports ADK so
     `pip install copa-chalkboard` without the [adk] extra still works.
     """
     from google.adk.agents import LlmAgent
     from google.genai import types
 
     return LlmAgent(
-        name="match_scout",
+        name=SCOUT_AGENT_NAME,
         model=config.SCOUT_MODEL,
         description="Looks at one match frame and returns a structured ScoutReport.",
         instruction=SCOUT_PROMPT,
