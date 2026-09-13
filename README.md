@@ -18,7 +18,7 @@ a **validation gate** guarding the handoff between them.
 
 ## The flow
 
-![Pipeline Flow Diagram](assets/pipeline_flow_diagram.png)
+![Pipeline Flow Diagram](assets/pipeline_flow_diagram.jpg)
 
 ## Quickstart
 
