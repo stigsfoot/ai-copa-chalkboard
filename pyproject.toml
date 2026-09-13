@@ -15,11 +15,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# ADK is the teaching centerpiece (in-process A2A via AgentTool/SequentialAgent).
-# It is optional so the pure-Python pipeline and the test suite run with zero
-# extra setup; install it to run the ADK-native pipeline.
-adk = ["google-adk>=2.2.0"]  # verified against google-adk 2.2.0 (output_schema API)
-dev = ["pytest>=8.0", "pytest-cov>=5.0"]
+# ADK is the teaching centerpiece (the in-process handoff as an ADK 2.0 Workflow
+# graph). It is optional so the pure-Python pipeline and the test suite run with
+# zero extra setup; install it to run the ADK-native pipeline.
+# >=2.9.0: the Workflow graph API (Workflow / @node / routes) and the
+# input_schema-on-nodes behaviour this code relies on. Verified against 2.9.0.
+adk = ["google-adk>=2.9.0"]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.5"]
 
 [project.scripts]
 copa-chalkboard = "copa_chalkboard.__main__:main"

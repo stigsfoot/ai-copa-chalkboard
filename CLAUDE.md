@@ -14,7 +14,9 @@ first-time ADK learner*, not for cleverness.
 2. **The gate is pure.** `gate.py` has no I/O and no model calls. Keep it that way
    so it stays unit-testable.
 3. **In-process by default.** The core lesson needs no gateway/Redis/Cloud Run.
-   See `docs/adr/0001`. Don't add distributed infra to the core path.
+   See `docs/adr/0001`. Don't add distributed infra to the core path. The ADK
+   path is a `Workflow` graph (`docs/adr/0004`); don't reintroduce `AgentTool`
+   or the deprecated `SequentialAgent`/`LoopAgent`.
 4. **Tests stay offline.** `make test` must pass with no API key and without
    `google-adk` installed. Lazy-import SDKs inside functions (see `scout.py`).
 5. **Secrets via env only.** `GEMINI_API_KEY` from the environment. `.env` is
@@ -26,7 +28,9 @@ first-time ADK learner*, not for cleverness.
 - `copa_chalkboard/schemas.py` — the typed contracts (start here).
 - `copa_chalkboard/scout.py` / `analyst.py` — the two agents.
 - `copa_chalkboard/gate.py` — the validation gate.
-- `copa_chalkboard/pipeline.py` — the wiring (plain Python + ADK-native).
+- `copa_chalkboard/pipeline.py` — the wiring (plain Python + ADK-native `Workflow` graph).
+- `copa_chalkboard/agent.py` — `adk web` entry point (imports ADK; nothing else may import it).
+- `docs/adk-release-review-2026-09.md` — what changed in google-adk and what we adopted.
 - `experiments/scout-smoketest/` — vision-reliability check (delivery risk).
 - `docs/codelab-verification-findings.md` — what was verified against the
   `GoogleCloudPlatform/race-condition` reference architecture.

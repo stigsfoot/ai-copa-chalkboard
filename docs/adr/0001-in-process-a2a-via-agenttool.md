@@ -1,6 +1,8 @@
 # ADR 0001 — In-process A2A via ADK `AgentTool`, not distributed services
 
-- **Status:** Accepted
+- **Status:** Accepted — the *in-process* decision stands. The *mechanism*
+  (`AgentTool` under a root `LlmAgent`) is superseded by [ADR 0004](0004-workflow-graph-handoff.md):
+  the handoff is now an ADK 2.0 `Workflow` graph.
 - **Date:** 2026-06-07
 
 ## Context
